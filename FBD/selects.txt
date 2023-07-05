@@ -1,0 +1,14 @@
+select first_name, last_name, department_name, job_title
+from employees, departments, jobs
+where departments.department_id = employees.department_id and
+jobs.job_id=employees.job_id;
+
+select first_name, department_name, job_title
+from employees, departments, jobs
+where departments.department_id = employees.department_id and
+jobs.job_id=employees.job_id;
+
+select first_name, department_id, job_id
+from employees, departments, jobs
+where departments.department_id = employees.department_id and
+jobs.job_id=employees.job_id;

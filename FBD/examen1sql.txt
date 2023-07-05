@@ -1,0 +1,32 @@
+1
+select carreras.nombre,materias.nombre 
+from materias, carreras
+where carreras.id_carrera = materias.id_carrera and carreras.nombre='Ingenieria en Sistemas'
+order by materias.nombre asc;
+
+
+select carreras.nombre,materias.nombre 
+from carreras,materias
+where carreras.id_carrera = materias.id_carrera and carreras.nombre='Ingenieria en Electronica'
+order by materias.nombre asc;
+2
+
+select tecnologicos.nombre, colonias.nombre 
+from colonias, tecnologicos
+where colonias.id_col = tecnologicos.id_col and colonias.nombre='Zona Centro';
+
+select tecnologicos.nombre, colonias.nombre 
+from colonias, tecnologicos
+where colonias.id_col = tecnologicos.id_col and colonias.nombre='Republica';
+
+3
+
+select paterno, materno,alumnos.nombre, edocivil.nombre, generos.nombre, carreras.nombre
+from alumnos, edocivil,generos, carreras
+where edocivil.id_edocivil=alumnos.id_edocivil and carreras.id_carrera=alumnos.id_carrera and
+generos.id_genero=alumnos.id_genero 
+order by paterno desc;
+
+4
+select count(*)
+from tecnologicos;

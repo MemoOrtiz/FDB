@@ -1,0 +1,165 @@
+insert into departments values (280,'Diseño de interfaces',null,3200);
+
+insert into jobs values ('DS_JF', 'Diseñador en Jefe', null, null);
+
+insert into employees values (207, 'Tocuato', 'CaraDura','TCTCD', null, '17/04/23','DS_JF', 10500, 0, null,280);
+
+select employee_id,first_name, last_name 
+from employees 
+where employee_id=207;
+
+select max(department_id) from departments;
+//asi se conoce el departamento maximo que conozco
+
+ select department_id,department_name 
+from departments 
+where department_name='Diseño de interfaces';
+
+select location_id,city from locations where city= 'Roma';
+
+select location_id 
+from locations
+where city like '%Roma%';
+
+
+update departments 
+set location_id = 1000
+where department_id =280;
+
+select department_name, department_id, location_id 
+from departments
+where department_name = 'Diseño de interfaces';
+
+
+insert into departments values (290, 'Departamento uno', null,3200);
+
+insert into departments values (300, 'Departamento dos', null,3200);
+
+select department_name 
+from departments,locations
+where departments.location_id = locations.location_id and city = 'Mexico City';
+
+--------------------------------------------------------------------------------
+
+estados/////
+ciudades/////
+generos/////
+edocivil/////
+colonias/////
+clientes
+
+create table  clientes
+(no_control numeric(6) not null,
+id_col numeric(3) not null,
+id_genero numeric(1) not null,
+id_edocivil numeric(2) not null,
+nombre VARCHAR(30),
+paterno VARCHAR(30),
+materno VARCHAR(30),
+edad NUMERIC(3),
+constraint pk_clientes primary key(no_control),
+constraint fk_clientesgeneros foreign key(id_genero)
+references generos(id_genero),
+constraint fk_clientesedocivil foreign key(id_edocivil)
+references edocivil(id_edocivil),
+constraint fk_clientescolonias foreign key(id_col)
+references colonias(id_col)
+);
+
+bancos
+create table bancos
+(id_banco numeric(3)not null,
+id_col numeric(3) not null,
+no_oficial numeric(5),
+nombre varchar(50),
+calle varchar(60),
+constraint pk_bancos primary key(id_banco),
+constraint fk_bancoscol foreign key(id_col)
+references colonias(id_col)
+);
+
+
+
+tipotarjeta
+
+create table tipotarjeta
+(id_tipo NUMERIC(1)not null,
+descripcion VARCHAR(20),
+constraint pk_tipotarjeta primary key(id_tipo)
+);
+
+
+
+cuentas
+
+create table cuentas
+(id_tarjeta NUMERIC(6) not null,
+id_banco numeric(3) not null,
+id_tipo numeric(1) not null, 
+fecha_a date,
+monto numeric(8,2),
+constraint pk_cuentas primary key(id_tarjeta),
+constraint fk_
+
+
+1.-
+
+select max_salary,min_salary
+from jobs
+where jobs.job_title = 'Stock Manager';
+
+2.-
+
+select first_name,last_name, commission_pct
+from employees
+where commission_pct IS NULL;
+
+update employees
+set commission_pct 0.1
+where commission_pct is null;
+
+3.-
+
+select first_name, last_name 
+from employees
+where commission_pct is null;
+
+4.- 
+select employees.first_name, departments.department_name, locations.city,
+countries.country_name
+from employees, departments, locations, countries,regions
+where employees.department_id = departments.department_id and
+departments.location_id = locations.location_id and
+countries.country_id = locations.country_id and
+regions.region_id = countries.region_id and
+region_name = 'Asia';
+
+5.- 
+
+select count* 
+from jobs
+where min_salary=4000;
+
+
+create table turnos
+(no_turno numeric(1) not null,
+nombre varchar(20) not null,
+constraint pk_turnos primary key (no_turno)
+);
+
+create table departamentos
+(id_departamento numeric(3) not null, 
+nombre varchar(45) not null,
+constraint pk_departamentos primary key(id_departamento)
+);
+
+
+
+
+
+
+
+
+
+
+

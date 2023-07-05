@@ -1,0 +1,422 @@
+
+create table estados
+(id_edo numeric(3) not null,
+nombre varchar(60) not null,
+constraint pk_edos primary key(id_edo)
+);
+
+create table ciudades
+(id_cd numeric(3) not null, 
+id_edo numeric (3) not null,
+nombre VARCHAR(60) not null,
+constraint pk_ciudades primary key (id_cd),
+constraint fk_cdedos foreign key(id_edo)
+references estados (id_edo)
+);
+
+create table colonias
+(id_col numeric(3) not null,
+id_cd numeric(3) not null,
+nombre VARCHAR(60) not null,
+constraint pk_colonias primary key(id_col),
+constraint fk_colcd foreign key(id_cd)
+references ciudades(id_cd)
+);
+
+create table tecnologicos
+(id_tec numeric(3) not null,
+id_col numeric(3) not null,
+nombre VARCHAR(100) not null,
+no_oficial numeric(6) not null,
+calle VARCHAR(50) not null,
+constraint pk_tecnologicos primary key(id_tec),
+constraint fk_teccol foreign key(id_col)
+references colonias(id_col)
+);
+
+create table carreras
+(id_carrera numeric(3) not null,
+id_tec numeric(3) not null,
+nombre VARCHAR(80) not null,
+duracion numeric(2) not null,
+presencial VARCHAR(1) not null,
+constraint pk_carrera primary key(id_carrera),
+constraint fk_carreratec foreign key(id_tec)
+references tecnologicos(id_tec)
+);
+
+create table materias
+(id_materia numeric(3) not null,
+id_carrera numeric(3) not null,
+nombre varchar(100) not null,
+creditos numeric(1) not null,
+horasp numeric(1) not null,
+horast numeric(1) not null,
+constraint pk_materia primary key (id_materia),
+constraint fk_matcar foreign key (id_carrera)
+references carreras (id_carrera) 
+);
+
+
+create table generos
+(id_genero numeric(1) not null,
+nombre varchar(30) not null,
+constraint pk_generos primary key (id_genero)
+);
+
+create table edocivil
+(id_edocivil numeric(1) not null,
+nombre varchar(30) not null,
+constraint pk_edocivil primary key (id_edocivil)
+);
+
+create table alumnos
+(no_control varchar(15) not null,
+id_carrera numeric(3) not null,
+id_edocivil numeric(5) not null,
+id_genero numeric(1) not null,
+nombre varchar(50) not null,
+paterno varchar(30) not null,
+materno varchar(30) not null,
+constraint pk_no_control primary key (no_control),
+constraint fk_no_controlcarrera foreign key (id_carrera)
+references carreras (id_carrera),
+constraint fk_no_controledocivil foreign key (id_edocivil)
+references edocivil (id_edocivil),
+constraint fk_no_controlgenero foreign key (id_genero)
+references generos (id_genero)
+);
+
+create table materiasalumno
+(id_materia numeric(3) not null,
+no_control varchar(15) not null,
+calificacion numeric(5,2) not null,
+constraint pk_alumat primary key (id_materia,no_control), 
+constraint fk_materias_id_materia foreign key(id_materia)
+references materias(id_materia),
+constraint fk_alumnos_no_control foreign key(no_control)
+references alumnos(no_control)
+);
+
+insert into estados(id_edo,nombre) values(1,'Coahuila');
+
+insert into estados(id_edo,nombre) values(2,'Nuevo Leon');
+
+insert into estados(id_edo,nombre) values(3,'Tamaulipas');
+
+insert into estados(id_edo,nombre) values(4,'San Luis Potosi');
+
+insert into estados(id_edo,nombre) values(5,'Tabasco');
+
+
+
+insert into ciudades(id_cd,id_edo,nombre) values(1,1,'Saltillo');
+
+insert into ciudades(id_cd,id_edo,nombre) values(2,1,'Monclova');
+
+insert into ciudades(id_cd,id_edo,nombre) values(3,1,'Piedras Negras');
+
+insert into ciudades(id_cd,id_edo,nombre) values(4,1,'Torreon');
+
+insert into ciudades(id_cd,id_edo,nombre) values(5,1,'Ramos Arizpe');
+
+insert into ciudades(id_cd,id_edo,nombre) values(6,2,'Monterrrey');
+
+insert into ciudades(id_cd,id_edo,nombre) values(7,2,'Santa Catarina');
+
+insert into ciudades(id_cd,id_edo,nombre) values(8,2,'San Pedro');
+
+
+
+insert into colonias(id_col,id_cd,nombre) values(1,1,'Zona Centro');
+
+insert into colonias(id_col,id_cd,nombre) values(2,1,'Republica');
+
+insert into colonias(id_col,id_cd,nombre) values(3,1,'Universidad');
+
+insert into colonias(id_col,id_cd,nombre) values(4,2,'Zona Centro');
+
+insert into colonias(id_col,id_cd,nombre) values(5,2,'Guadalupe');
+
+insert into colonias(id_col,id_cd,nombre) values(6,2,'El Pueblo');
+
+
+insert into tecnologicos values(1,2,'Tecnologico de Saltillo',1250,'Venustiano Carranza');
+
+
+insert into generos values(1,'masculino');
+
+insert into generos values(2,'femenino');
+
+
+insert into edocivil values (1, 'soltero');
+
+insert into edocivil values (2, 'casado');
+
+insert into edocivil values (3, 'viudo');
+
+insert into edocivil values (4, 'union libre');
+
+
+
+
+
+insert into carreras values(1,1,'Ingenieria en Sistemas',9,'P');
+
+insert into carreras values(2,1,'Ingenieria Electronica',9,'P');
+
+
+insert into materias values(1,1,'Fundamentos de Base de Datos',5,2,3);
+
+insert into materias values(2,1,'Programacion Orientada a Objetos',5,2,3);
+
+insert into materias values(3,1,'Fundamentos de Telecomunicaciones',4,3,1);
+
+insert into materias values(4,1,'Calculo Vectorial',5,5,0);
+
+insert into materias values(5,2,'Fundamentos de Base de Datos',5,2,3);
+
+insert into materias values(6,1,'Calculo Vectorial',5,5,0);
+
+insert into materias values(7,1,'Electromagnetismo',4,2,2);
+
+insert into materias values(8,1,'Fundamentos de Base de Datos',5,2,3);
+
+
+insert into alumnos values('L22050271',1,1,2,'Perla Rubi','Barragan','Cisca');
+
+insert into alumnos values('l21051404',1,1,1,'Alexander Abisahim','Contreras','Solis');
+
+insert into alumnos values('l21051405',1,1,1,'Nau Eduardo','Coronado','Solis');
+
+insert into alumnos values('l20051165',1,1,2,'Andrea Lizbeth','Cruz','Campos');
+
+insert into alumnos values('l21051441',1,1,2,'Karla Janeth','Gutiérrez','Martínez');
+
+insert into alumnos values('l22050278',1,1,2,'Kenya Saarai','Hernandez','Peña');
+
+insert into alumnos values('l22050279',1,1,1,'Jonathan ','Herrera','Diaz');
+
+insert into alumnos values('l21051468',1,1,1,'Eric Bladimir','Medrano','Leura');
+
+insert into alumnos values('l21051471',1,1,2,'Ana Valeria','Mercado','Sánchez');
+
+insert into alumnos values('l22050282',1,1,2,'Samantha ','Morales','Rico');
+
+insert into alumnos values('l21051476',1,1,1,'Cesar Alexis','Moreno','Morales');
+
+insert into alumnos values('l22050283',1,1,1,'Angel Gabriel','Morquecho','Pedroza');
+
+insert into alumnos values('l21051462',1,1,1,'Oscar Daniel','Martinez','Aguirre');
+
+insert into alumnos values('l22050370',1,1,1,'Guillermo Daniel','Ortiz','Aguilar');
+
+insert into alumnos values('l21051498',1,1,1,'Eliot Esau','Renteria','Rodríguez');
+
+insert into alumnos values('l22050293',1,1,1,'Fernando Alejandro','Vazquez','Medina');
+
+insert into alumnos values('l21051399',1,1,1,'Samuel ','Chenoweth','Valdes');
+
+
+insert into alumnos values('19051072',2,1,1,'Jerenis Benjamin','Acosta','Acosta');
+
+insert into alumnos values('L20051143',2,1,2,'Mónica ','Arévalo','Carbajal');
+
+insert into alumnos values('L20051141',2,1,1,'Luis Angel','Araiza','Cruz');
+
+insert into alumnos values('L20051146',2,1,1,'Juan Manuel','Buenrostro','Valenciano');
+
+insert into alumnos values('19051127',2,1,2,'Alexia Eloisa','Flores','Manzanarez');
+
+insert into alumnos values('18052269',2,1,2,'Marijose ','Gaona','Martinez');
+
+insert into alumnos values('18052273',2,1,2,'Ana Citlali','Garcia','Chambasis');
+
+insert into alumnos values('L20051187',2,1,1,'César Alonso','García','Suárez');
+
+insert into alumnos values('18052293',2,1,1,'Josue David','Hernandez','Gonzalez');
+
+insert into alumnos values('18052296',2,1,1,'Jesus Esmeralda','Huerta','De');
+
+insert into alumnos values('L21051038',2,1,2,'Karina Monserrat','Jimenez','Camacho');
+
+insert into alumnos values('20050200',2,1,2,'Valeria ','Lopez','Cisneros');
+
+insert into alumnos values('L20051203',2,1,1,'José Rolando','Luna','García');
+
+insert into alumnos values('20050207',2,1,1,'Juan Carlos','Moran','Briceño');
+
+insert into alumnos values('L20051216',2,1,1,'David Enrique','Mujica','Sanchez');
+
+insert into alumnos values('L20051230',2,1,1,'Alejandro ','Prado','Rivera');
+
+insert into alumnos values('L21050585',2,1,1,'Alberto Antonio','Rodriguez','Carrizales');
+
+insert into alumnos values('19051192',2,1,1,'Samuel Israel','Rodriguez','Flores');
+
+insert into alumnos values('L20051303',2,1,1,'Diego ','Valdes','Rocha');
+
+insert into materiasalumno values(1,'L22050271',84);
+
+insert into materiasalumno values(1,'l21051404',93);
+
+insert into materiasalumno values(1,'l21051405',77);
+
+insert into materiasalumno values(1,'l20051165',89);
+
+insert into materiasalumno values(1,'l21051441',98);
+
+insert into materiasalumno values(1,'l22050278',72);
+
+insert into materiasalumno values(1,'l22050279',81);
+
+insert into materiasalumno values(1,'l21051468',71);
+
+insert into materiasalumno values(1,'l21051471',91);
+
+insert into materiasalumno values(1,'l22050282',75);
+
+insert into materiasalumno values(1,'l21051476',80);
+
+insert into materiasalumno values(1,'l22050283',99);
+
+insert into materiasalumno values(1,'l21051462',73);
+
+insert into materiasalumno values(1,'l22050370',87);
+
+insert into materiasalumno values(1,'l21051498',95);
+
+insert into materiasalumno values(1,'l22050293',79);
+
+insert into materiasalumno values(1,'l21051399',88);
+
+
+insert into materiasalumno values(2,'19051072',85);
+
+insert into materiasalumno values(2,'L20051143',77);
+
+insert into materiasalumno values(2,'L20051141',91);
+
+insert into materiasalumno values(2,'L20051146',94);
+
+insert into materiasalumno values(2,'19051127',88);
+
+insert into materiasalumno values(2,'18052269',70);
+
+insert into materiasalumno values(2,'18052273',79);
+
+insert into materiasalumno values(2,'L20051187',83);
+
+insert into materiasalumno values(2,'18052293',97);
+
+insert into materiasalumno values(2,'18052296',76);
+
+insert into materiasalumno values(2,'L21051038',100);
+
+insert into materiasalumno values(2,'20050200',92);
+
+insert into materiasalumno values(2,'L20051203',72);
+
+insert into materiasalumno values(2,'20050207',82);
+
+insert into materiasalumno values(2,'L20051216',89);
+
+insert into materiasalumno values(2,'L20051230',71);
+
+insert into materiasalumno values(2,'L21050585',95);
+
+insert into materiasalumno values(2,'19051192',80);
+
+insert into materiasalumno values(2,'L20051303',73);
+
+
+insert into materiasalumno values(3,'L22050271',84);
+
+insert into materiasalumno values(3,'l21051404',93);
+
+insert into materiasalumno values(3,'l21051405',77);
+
+insert into materiasalumno values(3,'l20051165',89);
+
+insert into materiasalumno values(3,'l21051441',98);
+
+insert into materiasalumno values(3,'l22050278',72);
+
+insert into materiasalumno values(3,'l22050279',81);
+
+insert into materiasalumno values(3,'l21051468',71);
+
+insert into materiasalumno values(3,'l21051471',91);
+
+insert into materiasalumno values(3,'l22050282',75);
+
+insert into materiasalumno values(3,'l21051476',80);
+
+insert into materiasalumno values(3,'l22050283',99);
+
+insert into materiasalumno values(3,'l21051462',73);
+
+insert into materiasalumno values(3,'l22050370',87);
+
+insert into materiasalumno values(3,'l21051498',95);
+
+insert into materiasalumno values(3,'l22050293',79);
+
+insert into materiasalumno values(3,'l21051399',88);
+
+
+insert into materiasalumno values(4,'19051072',85);
+
+insert into materiasalumno values(4,'L20051143',77);
+
+insert into materiasalumno values(4,'L20051141',91);
+
+insert into materiasalumno values(4,'L20051146',94);
+
+insert into materiasalumno values(4,'19051127',88);
+
+insert into materiasalumno values(4,'18052269',70);
+
+insert into materiasalumno values(4,'18052273',79);
+
+insert into materiasalumno values(4,'L20051187',83);
+
+insert into materiasalumno values(4,'18052293',97);
+
+insert into materiasalumno values(4,'18052296',76);
+
+insert into materiasalumno values(4,'L21051038',100);
+
+insert into materiasalumno values(4,'20050200',92);
+
+insert into materiasalumno values(4,'L20051203',72);
+
+insert into materiasalumno values(4,'20050207',82);
+
+insert into materiasalumno values(4,'L20051216',89);
+
+insert into materiasalumno values(4,'L20051230',71);
+
+insert into materiasalumno values(4,'L21050585',95);
+
+insert into materiasalumno values(4,'19051192',80);
+
+insert into materiasalumno values(4,'L20051303',73);
+
+
+
+
+
+
+
+create table duda
+(id_materia
+ no_control
+ constraint pk_duda primary key(id_materia, no_control),
+
+);
+
+alter table
+
+drop table alumno, carrera, colonia. genero, materia, tecnologico
+ 

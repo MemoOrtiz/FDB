@@ -1,0 +1,87 @@
+create table colonia
+(id_col numeric(3) not null,
+id_cd numeric(3) not null,
+nombre varchar(60) not null,
+constraint pk_colonia primary key (id_col),
+constraint fk_coloniaciudades foreign key (id_cd)
+references ciudades (id_cd) 
+);
+
+create table tecnologico
+(id_tec numeric(3) not null,
+id_col numeric(3) not null,
+nombre varchar(60) not null,
+constraint pk_tecnologico primary key (id_tec),
+constraint fk_tecnologicocolonia foreign key (id_col)
+references colonia (id_col) 
+);
+
+create table carrera
+(id_carrera numeric(3) not null,
+id_tec numeric(3) not null,
+nombre varchar(60) not null,
+modalidad varchar (40) not null,
+duracion numeric(3) not null,
+constraint pk_carrera primary key (id_carrera),
+constraint fk_carreratecnologico foreign key (id_tec)
+references tecnologico (id_tec) 
+);
+
+create table genero
+(id_genero numeric(1) not null,
+nombre varchar(60) not null,
+constraint pk_genero primary key (id_genero)
+);
+
+create table edocivil
+(id_edocivil numeric(5) not null,
+nombre varchar(60) not null,
+constraint pk_edocivil primary key (id_edocivil)
+);
+
+create table materia
+(id_materia varchar(10) not null,
+id_carrera numeric(3) not null,
+nombre varchar(100) not null,
+creditos numeric(1) not null,
+horasp numeric(1) not null,
+horast numeric(1) not null,
+constraint pk_materia primary key (id_materia),
+constraint fk_materiacarrera foreign key (id_carrera)
+references carrera (id_carrera) 
+);
+
+create table alumno
+(no_control varchar(15) not null,
+id_genero numeric(1) not null,
+id_edocivil numeric(5) not null,
+id_carrera numeric(3) not null,
+nombre varchar(50) not null,
+paterno varchar(30) not null,
+materno varchar(30) not null,
+edad numeric(3) not null,
+constraint pk_no_control primary key (no_control),
+constraint fk_no_controlgenero foreign key (id_genero)
+references genero (id_genero),
+constraint fk_no_controledocivil foreign key (id_edocivil)
+references edocivil (id_edocivil),
+constraint fk_no_controlcarrera foreign key (id_carrera)
+references carrera (id_carrera)
+);
+
+create table alumno_has_materias
+(id_materia varchar(10) not null,
+no_control varchar(15) not null,
+constraint pk_alumat primary key (id_materia,no_control), 
+constraint fk_materias_id_materia foreign key(id_materia)
+references materia(id_genero),
+constraint fk_alumno_no_control foreign key(no_control)
+references alumno(no_control)
+);
+
+
+alter table materiasalumnos add constraint 
+pk_matalu primary key (id_materria, no_control);
+
+
+

@@ -1,0 +1,343 @@
+create table turnos
+(no_turno numeric(1) not null,
+nombre varchar(20) not null,
+constraint pk_turnos primary key (no_turno)
+);
+
+create table departamentos
+(id_departamento numeric(3) not null,
+nombre varchar(45) not null,
+constraint pk_departamentos primary key(id_departamento)
+);
+
+create table jefes
+(id_jefe numeric(2) not null,
+nombre varchar(30) not null,
+paterno varchar(30) not null,
+materno varchar(30) not null,
+constraint pk_jefes primary key(id_jefe)
+);
+
+create table empleados
+(no_empleado numeric(3) not null,
+id_departamento numeric(3) not null,
+id_jefe numeric(2) not null,
+no_turno(1) not null,
+nombre varchar(30),
+paterno varchar(30),
+materno varchar(30),
+constraint pk_empleados primary key(no_empleado),
+constraint fk_empleadosdepartamentos foreign key(id_departamento)
+references departamentos(id_departamento),
+constraint fk_empleadosjefes foreign key(id_jefe)
+references jefes(id_jefe),
+constraint fk_empleadosturno foreign key(no_turno)
+references turnos(no_turno)
+);
+
+
+EXAMEN NORMALIZACION 4
+create table lugares_fab
+(id_lugar numeric(3) not null,
+nombre varchar(50) not null
+constraint pk_lf primary key(id_lugar)
+);
+
+create table colores
+(id_color numeric(3) not null,
+nombre varchar(50) not null
+constraint pk_colores primary key(id_color)
+);
+
+create table marcas
+(id_marca numeric(8) not null,
+nombre varchar(80) not null
+constraint pk_marcas primary key(id_marca)
+);
+
+create table combustibles
+(id_comb numeric(2) not null,
+nombre varchar(50) not null
+constraint pk_comb primary key(id_comb)
+);
+
+create table carros
+(no_serie numeric(8) not null,
+fecha_fab date not null,
+id_comb numeric(2) not null,
+id_color numerci(3) not null,
+id_marca numeric(8) not null,
+id_lugar numeric(3) not null
+constraint pk_carros primary key(no_serie),
+constraint fk_carcomb foreign key(id_comb)
+references combustibles(id_comb),
+constraint fk_carcol foreign key(id_color)
+references colores(id_color),
+constraint fk_carmarca foreign key(id_marca)
+references marcas(id_marca),
+constraint fk_carlugar foreing key(id_lugar)
+references lugares_fab(id_lugar)
+);
+
+1.-
+select id_comb, nombre
+from combustibles
+where nombre = 'Electrico';
+select id_marca,nombre
+from marcas
+where nombre= 'Tesla';
+
+update carros
+set id_comb=2,id_marca=3
+where no_serie=1234
+
+select carros.no_serie,combustibles.nombre,marcas.nombre
+from carros, combustibles, marcas
+where no_serie=1234 and combustibles.id_comb=carros.id_comb and
+marcas.id_marca=carros.id_marca;
+2.-
+insert into lugares_fab values(3, 'Giga Tesla Monterrey');
+3.-
+select count(*)
+from carros, combustibles
+where combustibles.id_comb=carros.id_comb and 
+combustibles.nombre='Electricos' ;
+
+select carros.no_serie, marcas.nomnbre, colores.nombre, combustibles.nombre
+from carros, marcas, colores, combustibles,lugares_fab
+where lugares_fab.nombre='Planta de aguascalientes' and
+combustibles.id_comb=carros.id_comb and
+marcas.id_marca=carros.id_marca and
+colores.id_color = carros.id_color and
+lugares_fab.id_lugar=carros.id_lugar;
+
+//si no hay planta hacer una con
+
+select id_lugar
+from lugares_fab
+where lugares_fab.nombre = 'Planta de Ramos Arizpe';
+select id_lugar
+from lugares_fab
+where lugares_fab.nombre = 'Planta de Aguascalientes';
+
+update carros
+set id_lugar=2
+where id_lugar=1;
+
+delete from carros
+where lugares_fab.id_lugar=2;
+
+select alumnos.nombre,alumnos.paterno,alumnos.materno
+from alumnos al, tecnologicos te, generos g, edocivil ec,carreras c  //asi es como se puede poner los alias
+where al.id_carrera=
+(select carreras.id_carrera from tecnologicos, carreras 
+where tecnologicos.nombre='Instituto Tecnologico de Saltillo' and 
+carreras.nombre !='Ingenieria en Sistemas' and 
+tecnologicos.id_tec=carreras.id_tec) and
+al.id_genero=(select generos.id_genero from generos where upper(generos.nombre)=upper('Femenino')) and      //se puede usar lower o upper para que busque en mayusculas o minusculas 
+al.id_edocivil=(select ec.id_edocivil from edocivil where ec.nombre like '%olter%')
+carreras.id_tec = tecnologicos.id_tec;
+
+// en este caso lo que se hizo fue que toda la columna generos.nombre se hiciera mayuscula para asi lograr que sea indistitno el femenino
+
+select alumnos.nombre, alumnos.paterno, alumnos.materno
+from alumnos a, tecnologicos t, generos g, edocivil e, carreras c
+where a.id_genero=g.id_genero and
+a.id_edocivil=e.id_edocivil and
+a.id_carrera=c.id_carrera and
+c.id_tec = t.id_tec and
+c.nombre<>'Sistemas'
+order by paterno desc;
+
+select acount(*) //contar cuantos alumnos son distintos a sistemas
+from alumnos a, tecnologicos t, generos g, edocivil e, carreras c
+where a.id_genero=g.id_genero and
+a.id_edocivil=e.id_edocivil and
+a.id_carrera=c.id_carrera and
+c.id_tec = t.id_tec and
+c.nombre<>'Sistemas'
+
+select avg(edad)  //promedio de la edad de alumnos que son diferentes de sistemas
+from alumnos a, tecnologicos t, generos g, edocivil e, carreras c
+where a.id_genero=g.id_genero and
+a.id_edocivil=e.id_edocivil and
+a.id_carrera=c.id_carrera and
+c.id_tec = t.id_tec and
+c.nombre<>'Sistemas'
+
+2 requerimiento
+
+select id_tec from tecnologicos where nombre='Tecnologico de la Laguna';
+NO ESTÁ REGISTRADO
+select max(id_tec) from tecnologicos;     //suponiendo que me entrega 44
+insert into tecnologicos values(44,  ,  ,  ,);
+
+select id_carrera from carreras where nombre='Ingenieria en Materiales';
+si no existe
+select max(id_carrera) from carreras;   //suponiendo que me da el 88
+insert into carreras values(88,44,   ,   );
+
+insert into alumnos values('998877', 88,1,1,   ,    ,    );
+
+select*from alumnos where no_control='998877';
+
+
+// BASE DE DATOS DE MULTAS, REQUERIMIENTO PARA EXAMEN
+
+tablas padre:
+estado
+	ciudad
+		colonia
+			domicilio
+tipo_sangre
+sexo
+conductor
+				licencia
+color
+marca
+		auto
+clasificacion
+estatus char(1)
+'S'
+			multa
+
+create table estado
+(idEstado numeric(1) not null,
+estado
+
+DUDAS DE LOS COMANDOS DE SQL
+
+show user
+desc dba_users; 
+dba_users; //cuando estamos como el dba
+grant connect, resource to patito;  //para darl privilegios a patito
+
+DDL
+create
+	create table nombre
+	create user patito identified by patito;
+alter
+	 alter table usuarios rename to usuario;(el que hizo el create es el que lo puede hacer)
+	alter user patito identified by memito;
+	
+	alter user regions rename column region_name to region; //JAMAS SE HACE CUANDO ESTA EN OPERACION
+
+	Modificar la definicion de una tabla, de un usuario, de una vista, etc
+	Que le puedo modificar a una tabla.
+	-Su nombre (no se recomienda) solo durante la etapa de diseño.
+	-nombre de los atributos(no se recomienda)solo durante la etapa de diseño.
+	-Puedo agregar o quitar atributos.(no se recomienda) solo durante la etapa de diseño
+	alter table regions add uno varchar(10);
+	
+drop
+	drop user patito; (dba tiene que hacerlo ya que patito no puede eliminarse a si mismo)
+	drop table estados;
+
+DML
+select
+	select*from estados;
+	
+insert
+	insert into estados values(1, 'coahuila');
+
+delete
+	delete from ejemplo where no_control=1; 
+		//Para terminar la transaccion hay que poner OK(commit)
+		//o terminarla con NO OK(rollback)
+
+update
+
+SUM
+max
+min
+avg 
+count		select count(*) from tabla;  select count(no_control)from alumnos;
+
+
+// EXAMEN
+
+select multa.folio_multa 
+from multa, marca, color, auto
+where marca.idMarca=auto.idMarca and
+color.idColor=auto.idColor and
+auto.Placa=multa.Placa and
+color.nombre='Rojo' and marca.marca='Nissan';
+
+select conductor.nombre, conductor.A_Paterno, conductor.A_Materno, licencia.Tipo_Licencia, auto.placa
+from conductor, auto, licencia, 
+where conductor.folio=licencia.FolioLicencia and
+auto.folio=conductor.folio and
+conductor.folio=licencia.folio and
+order by conductor.A_Paterno desc;
+
+3.- Al conductor llamado Juan Torres Mochas es infraccionado el dia de hoy por manejar en el estado de ebriedad, el auto en que lo infraccionan
+es el que tiene la placa ABC-123. Realiza lo necesario para que se aplique la multa
+
+insert into conductor values(select max(folio) from conductor, 'Juan','Torres','Mochas');
+insert into multa values(ABC-123,select idClasificacion from Clasificacion where clase_Multa='Estado de ebriedad', 1);
+
+//resolucion por gallegos
+select folio from conductor 
+where nombre= 'Juan' and a_paterno = 'Torres' and a_materno ='Mochas'; 88
+Si no existe
+select max(folio) from conductor; 87+1
+insert int conductor values(88, 'Juan', 'Torres','Mochas');
+insert into auto values();
+insert into licencia values();
+
+insert into multa(33,'ABC-123',select idclasificacion from clasificacion where clase_multa='Estado de ebriedad',1);
+ 
+4.- Generar un listado de los conductores que su tipo de sangre sea O- y sean femeninas
+
+select conductor.nombre, conductor.A_Paterno, conductor.A_Materno
+from conductor, tipo_sangre, sexo, licencia
+where tipo_sangre.tipo_sangre='O-' and sexo.sexo='Femenino' and
+conductor.folio=licencia.folio and
+sexo.idSexo=licencia.idSexo and
+tipo_sangre.idTipo_Sangre=licencia.idtipo_sangre
+;
+
+//AUNQUE NO TOME INFORMACION DE LA TABLA PERO SI DEBO PONERLA POR LAS RELACIONES
+5.- Genera un listado de los conductores cuyo domicilio es de Av. Univesidad de la colonia Zona Centro
+
+select conductor.nombre, conductor.A_Paterno, conductor.A_Materno
+from conductor, domicilio, colonia
+where conductor.folio= licencia.folio  and
+colonia.idColonia= domicilio.idColonia and
+domicilo.idDomicilio = licencia.idDomicilio and
+domicilio.calle='Av. Universidad'and colonia.colonia='Zona Centro';
+
+//segundas
+
+select idTipo_Sangre from tipo_sangre where Tipo_sangre='O+';1
+select conductor.folio from conductor where nombre='Pánfilo' and A_paterno = 'Cara' and A_materno = 'Dura';123456789
+
+update licencias set idTipoSangre=1 where folio=123456789;
+
+select c.nombre, c.A_Paterno, c.A_Materno, tp.tipo_sangre, l.fecha_expedicion, l.fecha_vencimiento
+from conductor c,Tipo_sangre tp, licencias l 
+where c.folio=123456789 and
+c.folio=l.folio and l.idTipo_Sangre=tp.id_Tipo_Sangre;
+
+
+select estatus.idestatus from estatus where estatus.estatus='N'; 2
+
+select m.folio_multa, c.clase_multa,c.precio, a.placa
+from multas m , clasificacion c, auto a, estatus e
+where c.idclasificacion=m.idclasificacion  and a.placa=m.placa and e.idestatus=m.idestatus
+e.idestatus=2;
+
+
+select folio_multa from multas where placa='123-ABC'; /987654321
+
+delete from multa where = folio_multa = 987654321;
+select folio_multa from multas where placa='123-ABC'; //no rows
+
+
+select  c.nombre, c.A_Paterno, c.A_Materno
+from conductores c, licencia l, domicilio, d, colonia col, ciudad ciu, estado edo
+where c.folio=l.folio and edo.idestado=ciu.idestado and ciu.idciudad=col.idciudad and 
+col.idcolonia=d.idcolonia and d.idomicilio=l.iddomicilio and edo.estado='Coahuila'and
+order by c.A_paterno asc;
+
+select count(*)from licencias;	

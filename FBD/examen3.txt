@@ -1,0 +1,67 @@
+Examen 
+1
+select region_id, region_name from regions;
+
+select locations.city, countries.country_name
+from locations, countries, regions
+where regions.region_id = countries.region_id and
+countries.country_id = locations.country_id and
+regions.region_id = 3;
+
+select country_id,country_name 
+from regions, countries 
+where regions.region_id = countries.region_id and
+regions.region_id=3;
+
+2
+select region_id, region_name from regions;
+
+desc regions;
+insert into regions values(5,'Región Parda');
+
+update countries
+set region_id = 5
+where region_id = 3;
+
+3)
+
+select first_name, last_name,department_name, region_name
+from employees,departments, locations, countries, regions
+where departments.department_id = employees.department_id and
+locations.location_id = departments.location_id and
+countries.country_id = locations.country_id and
+regions.region_id = countries.region_id and
+regions.region_name = 'Región Parda';
+
+select employees.first_name, employees.last_name,departments.department_name, regions.region_name
+from employees,departments, locations, countries, regions
+where departments.department_id = employees.department_id and
+locations.location_id = departments.location_id and
+countries.country_id = locations.country_id and
+regions.region_id = countries.region_id and
+regions.region_id = 5;
+
+select employee_id from employees e, departments d, locations l, countries c, regions r where e.department_id = d.department_id AND d.location_id = l.location_id AND l.country_id = c.country_id AND c.region_id = r.region_id AND r.region_id = 3;
+
+
+
+
+
+
+
+select first_name, last_name,department_name, region_name
+from employees,departments, locations, countries, regions
+where regions.region_id = countries.region_id and
+countries.country_id = locations.country_id and
+locations.location_id = departments.location_id and
+departments.department_id = employees.department_id and
+regions.region_name = 'Región Parda';
+
+
+
+select first_name, last_name,department_name, region_name
+from employees,departments, locations, regions
+where departments.department_id = employees.department_id and
+locations.location_id = departments.location_id and
+countries.country_id = locations.country_id and
+regions.region_name = 'Región Parda';
